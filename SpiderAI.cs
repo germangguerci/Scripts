@@ -193,6 +193,7 @@ public class SpiderAI : MonoBehaviour {
 	 */
 	public virtual void ReachedEndOfPath () {
 		//The AI has reached the end of the path
+		tr.animation.Play ("attack_Melee");
 	}
 	
 	/** Update is called once per frame */
@@ -244,10 +245,11 @@ public class SpiderAI : MonoBehaviour {
 						} else {
 								transform.Translate (forwardDir * Time.deltaTime, Space.World);
 						}
+			tr.animation.Play ("walk");
 
 				} 
 		else {
-			animation.Play ("iddle");						
+			tr.animation.Play ("iddle");						
 		}
 	}
 	
