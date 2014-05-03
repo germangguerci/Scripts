@@ -19,6 +19,6 @@ public class Salud : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		GUI.Box (new Rect(100,30,180,25), "Salud");
+		GUI.Box (new Rect(40,50,80,25), "Salud: " + salud);
 	}
 }
