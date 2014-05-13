@@ -47,9 +47,9 @@ public class SpiderAI : MonoBehaviour {
 	
 	/** NavmeshController which handles movement if not null*/
 	protected NavmeshController navmeshController;
-
+	
 	// Distancia minima en la que empezara el seguimiento. 
-
+	
 	public float distanciadevision = 15; 
 	
 	/** Transform, cached because of performance */
@@ -67,7 +67,7 @@ public class SpiderAI : MonoBehaviour {
 		seeker = GetComponent<Seeker>();
 		controller = GetComponent<CharacterController>();
 		navmeshController = GetComponent<NavmeshController>();
-
+		
 		tr = transform;
 		Repath ();
 	}
@@ -193,67 +193,67 @@ public class SpiderAI : MonoBehaviour {
 	 */
 	public virtual void ReachedEndOfPath () {
 		//The AI has reached the end of the path
-	
+		
 		tr.animation.Play ("attack_Melee");
-
+		
 		tr.LookAt (target.position);
 	}
 	
 	/** Update is called once per frame */
 	public void Update () {
-
+		
 		float distancia = Vector3.Distance(transform.position , target.position);
-
+		
 		if (distancia <= distanciadevision) {
-
-						if (path == null || pathIndex >= path.Length || pathIndex < 0 || !canMove) {
-								return;
-						}
-		
-						//Change target to the next waypoint if the current one is close enough
-						Vector3 currentWaypoint = path [pathIndex];
-						currentWaypoint.y = tr.position.y;
-						while ((currentWaypoint - tr.position).sqrMagnitude < pickNextWaypointDistance*pickNextWaypointDistance) {
-								pathIndex++;
-								if (pathIndex >= path.Length) {
-										//Use a lower pickNextWaypointDistance for the last point. If it isn't that close, then decrement the pathIndex to the previous value and break the loop
-										if ((currentWaypoint - tr.position).sqrMagnitude < (pickNextWaypointDistance * targetReached) * (pickNextWaypointDistance * targetReached)) {
-												ReachedEndOfPath ();
-												return;
-										} else {
-												pathIndex--;
-												//Break the loop, otherwise it will try to check for the last point in an infinite loop
-												break;
-										}
-								}
-								currentWaypoint = path [pathIndex];
-								currentWaypoint.y = tr.position.y;
-						}
-		
-		
-						Vector3 dir = currentWaypoint - tr.position;
-		
-						// Rotate towards the target
-						tr.rotation = Quaternion.Slerp (tr.rotation, Quaternion.LookRotation (dir), rotationSpeed * Time.deltaTime);
-						tr.eulerAngles = new Vector3 (0, tr.eulerAngles.y, 0);
-		
-						Vector3 forwardDir = transform.forward;
-						//Move Forwards - forwardDir is already normalized
-						forwardDir = forwardDir * speed;
-						forwardDir *= Mathf.Clamp01 (Vector3.Dot (dir.normalized, tr.forward));
-		
-						if (navmeshController != null) {
-						} else if (controller != null) {
-								controller.SimpleMove (forwardDir);
-						} else {
-								transform.Translate (forwardDir * Time.deltaTime, Space.World);
-						}
-			if (tr.animation.isPlaying == false) {
-			tr.animation.Play ("walk");
+			
+			if (path == null || pathIndex >= path.Length || pathIndex < 0 || !canMove) {
+				return;
 			}
-
-
-				} 
+			
+			//Change target to the next waypoint if the current one is close enough
+			Vector3 currentWaypoint = path [pathIndex];
+			currentWaypoint.y = tr.position.y;
+			while ((currentWaypoint - tr.position).sqrMagnitude < pickNextWaypointDistance*pickNextWaypointDistance) {
+				pathIndex++;
+				if (pathIndex >= path.Length) {
+					//Use a lower pickNextWaypointDistance for the last point. If it isn't that close, then decrement the pathIndex to the previous value and break the loop
+					if ((currentWaypoint - tr.position).sqrMagnitude < (pickNextWaypointDistance * targetReached) * (pickNextWaypointDistance * targetReached)) {
+						ReachedEndOfPath ();
+						return;
+					} else {
+						pathIndex--;
+						//Break the loop, otherwise it will try to check for the last point in an infinite loop
+						break;
+					}
+				}
+				currentWaypoint = path [pathIndex];
+				currentWaypoint.y = tr.position.y;
+			}
+			
+			
+			Vector3 dir = currentWaypoint - tr.position;
+			
+			// Rotate towards the target
+			tr.rotation = Quaternion.Slerp (tr.rotation, Quaternion.LookRotation (dir), rotationSpeed * Time.deltaTime);
+			tr.eulerAngles = new Vector3 (0, tr.eulerAngles.y, 0);
+			
+			Vector3 forwardDir = transform.forward;
+			//Move Forwards - forwardDir is already normalized
+			forwardDir = forwardDir * speed;
+			forwardDir *= Mathf.Clamp01 (Vector3.Dot (dir.normalized, tr.forward));
+			
+			if (navmeshController != null) {
+			} else if (controller != null) {
+				controller.SimpleMove (forwardDir);
+			} else {
+				transform.Translate (forwardDir * Time.deltaTime, Space.World);
+			}
+			if (tr.animation.isPlaying == false) {
+				tr.animation.Play ("walk");
+			}
+			
+			
+		} 
 		else {
 			tr.animation.Play ("iddle");						
 		}
