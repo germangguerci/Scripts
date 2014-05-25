@@ -4,11 +4,11 @@ using System.Collections;
 public class Salud : MonoBehaviour {
 
 	//Salud Actual
-	float salud;
+	public float salud;
 	//Salud maxima
-	float saludmax = 100f;
+ float saludmax = 100f;
 	//¿Me estan atacando?
-	bool bajoataque;
+	public bool bajoataque;
 	//Regeneracion de vida por segundo
 	float regsalud = 1.5f;
 
